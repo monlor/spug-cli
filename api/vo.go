@@ -87,7 +87,7 @@ type ApplyData struct {
 	Name          string `json:"name"'`
 	Version       string `json:"version"`
 	Type          string `json:"type"`
-	envId         int    `json:"env_id"`
+	EnvId         int    `json:"env_id"`
 	EnvName       string `json:"env_name"`
 	Plan          string `json:"plan"`
 	AppId         int    `json:"app_id"`

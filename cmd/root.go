@@ -21,21 +21,25 @@ var (
 	userPath = fmt.Sprintf("%s/.spug", os.Getenv("HOME"))
 )
 
-// rootCmd represents the base command when called without any subcommands
-var rootCmd = &cobra.Command{
-	Use:   "spug-cli",
-	Short: "Spug命令行工具",
-	Long:  `Spug命令行工具，支持提申请单发布，查询日志，审核等操作`,
-	// Uncomment the following line if your bare application
-	// has an action associated with it:
-	// Run: func(cmd *cobra.Command, args []string) { },
-}
-
 type Login struct {
 	Url          string
 	Username     string
 	Password     string
 	LarkBotToken string
+}
+
+// rootCmd represents the base command when called without any subcommands
+var rootCmd = &cobra.Command{
+	Use:   "spug-cli",
+	Short: "Spug command line tool, support application release, log query, audit and so on",
+	Example: `  spug-cli login -u [your user name] -p [your password]
+  spug-cli publish -e dev -a job
+  spug-cli publish -e dev -a base -v dev-latest -w
+  spug-cli logs 6634
+  spug-cli status 6634`,
+	// Uncomment the following line if your bare application
+	// has an action associated with it:
+	// Run: func(cmd *cobra.Command, args []string) { },
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -80,10 +84,14 @@ func readUser() {
 	}
 }
 
-func GetEnvId(environment string) (envId int) {
+func GetEnvId(environment string) (envId int, err error) {
+	envId = -1
+	if environment == "" {
+		return envId, nil
+	}
 	envs, err := s.Env()
 	if err != nil {
-		panic(err)
+		return envId, err
 	}
 	for _, env := range envs {
 		if env.Key == environment {
@@ -92,16 +100,16 @@ func GetEnvId(environment string) (envId int) {
 		}
 	}
 	if envId == -1 {
-		panic("找不到该环境！")
+		return envId, errors.New("找不到该环境：" + environment)
 	}
-	return
+	return envId, err
 }
 
-func GetAppId(appKey string) (appId int) {
+func GetAppId(appKey string) (appId int, err error) {
 	appId = -1
 	apps, err := s.App()
 	if err != nil {
-		panic(err)
+		return appId, err
 	}
 	for _, v := range apps {
 		if v.Key == appKey {
@@ -110,9 +118,64 @@ func GetAppId(appKey string) (appId int) {
 		}
 	}
 	if appId == -1 {
-		panic("找不到该应用！")
+		return appId, errors.New("找不到该应用：" + appKey)
 	}
-	return
+	return appId, err
+}
+
+func SelectEnv(result *string) error {
+	if *result != "" {
+		return nil
+	}
+	envs, err := s.Env()
+	if err != nil {
+		return err
+	}
+	var options []string
+	for _, env := range envs {
+		options = append(options, env.Name)
+	}
+	var index int
+	err = SelectOptions("请选择环境:", &index, options)
+	*result = envs[index].Key
+	return err
+}
+
+func SelectApp(result *string) error {
+	if *result != "" {
+		return nil
+	}
+	apps, err := s.App()
+	if err != nil {
+		return err
+	}
+	var options []string
+	for _, app := range apps {
+		options = append(options, app.Name)
+	}
+	var index int
+	err = SelectOptions("请选择应用:", &index, options)
+	*result = apps[index].Key
+	return err
+}
+
+func SelectApply(result *int) error {
+	applies, err := s.Apply()
+	if err != nil {
+		return err
+	}
+	var options []string
+	for _, apply := range applies[:20] {
+		if apply.Version == "" {
+			apply.Version = "空"
+		}
+		options = append(options, fmt.Sprintf("%d-%s-%s-%s-%s-%s",
+			apply.Id, apply.AppName, apply.EnvName, apply.Version, apply.CreatedByUser, apply.StatusAlias))
+	}
+	var index int
+	err = SelectOptions("请选择申请单:", &index, options)
+	*result = applies[index].Id
+	return err
 }
 
 func SendMessage(text string) error {

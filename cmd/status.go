@@ -12,27 +12,33 @@ import (
 )
 
 func init() {
+	var applyId int
 	// statusCmd represents the status command
 	var statusCmd = &cobra.Command{
 		Use:   "status [applyId]",
 		Short: "Show apply status",
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				panic("申请单ID不能为空！")
-			}
-			applyId, err := strconv.Atoi(args[0])
-			if err != nil {
-				panic(err)
-			}
+		RunE: func(cmd *cobra.Command, args []string) error {
 			api.Login(&s)
+			if len(args) == 0 {
+				if err := SelectApply(&applyId); err != nil {
+					return err
+				}
+			} else {
+				if r, err := strconv.Atoi(args[0]); err != nil {
+					return err
+				} else {
+					applyId = r
+				}
+			}
 			info, err := s.RequestInfo(applyId)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			fmt.Println(info.StatusAlias)
 			if info.Reason != "" {
 				fmt.Println(info.Reason)
 			}
+			return nil
 		},
 	}
 	rootCmd.AddCommand(statusCmd)

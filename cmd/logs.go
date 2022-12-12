@@ -11,24 +11,30 @@ import (
 )
 
 func init() {
+	var applyId int
 	// logsCmd represents the logs command
 	var logsCmd = &cobra.Command{
 		Use:   "logs [applyId]",
 		Short: "Show apply logs",
-		Run: func(cmd *cobra.Command, args []string) {
-			if len(args) == 0 {
-				panic("申请单ID不能为空！")
-			}
-			applyId, err := strconv.Atoi(args[0])
-			if err != nil {
-				panic(err)
-			}
+		RunE: func(cmd *cobra.Command, args []string) error {
 			api.Login(&s)
+			if len(args) == 0 {
+				if err := SelectApply(&applyId); err != nil {
+					return err
+				}
+			} else {
+				if r, err := strconv.Atoi(args[0]); err != nil {
+					return err
+				} else {
+					applyId = r
+				}
+			}
 			log, err := s.RequestLog(applyId)
 			if err != nil {
-				panic(err)
+				return err
 			}
 			fmt.Println(log.Data)
+			return nil
 		},
 	}
 	rootCmd.AddCommand(logsCmd)
