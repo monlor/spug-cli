@@ -15,6 +15,7 @@ func init() {
 		version     string
 		environment string
 		wait        bool
+		title       string
 	)
 
 	var publishCmd = &cobra.Command{
@@ -67,7 +68,7 @@ func init() {
 				return errors.New("找不到发布配置！")
 			}
 			// 提交发布申请
-			apply, err := s.Request("Spug Cli 工具自动提交", version, deploy.HostIds, deploy.Id)
+			apply, err := s.Request(title, version, deploy.HostIds, deploy.Id)
 			if err != nil {
 				panic(err)
 			}
@@ -94,6 +95,8 @@ func init() {
 	publishCmd.PersistentFlags().StringVarP(&version, "version", "v", "", "Application branch/tag to publish, eg: dev-latest,v1.0.0...")
 	publishCmd.PersistentFlags().StringVarP(&environment, "environment", "e", "", "Publish Environment Key, eg: dev,test,uat,saas... (required)")
 	publishCmd.PersistentFlags().BoolVarP(&wait, "wait", "w", false, "Wait for the release to complete")
+	publishCmd.PersistentFlags().StringVarP(&title, "title", "t", "Spug Cli 工具自动提交", "Publish title")
+
 	//publishCmd.MarkPersistentFlagRequired("appKey")
 	//publishCmd.MarkPersistentFlagRequired("environment")
 }
@@ -109,17 +112,17 @@ func waitFinish(data api.ApplyData) error {
 		}
 		if info.Status == "3" {
 			fmt.Println("发布成功！")
-			SendMessage(fmt.Sprintf("🎉 模块 %s 发布 %s 成功！", data.AppName, data.Version))
+			SendMessage(fmt.Sprintf("🎉 模块 %s 发布%s %s 成功！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		if info.Status != "2" {
 			fmt.Printf("发布失败！%s:%s\n", info.StatusAlias, info.Reason)
-			SendMessage(fmt.Sprintf("💥 模块 %s 发布 %s 失败！", data.AppName, data.Version))
+			SendMessage(fmt.Sprintf("💥 模块 %s 发布%s %s 失败！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		if count >= maxCount {
 			fmt.Println("检查超时！请手动检查状态！")
-			SendMessage(fmt.Sprintf("❗️️ 模块 %s 发布 %s 超时，请手动检查状态！", data.AppName, data.Version))
+			SendMessage(fmt.Sprintf("❗️️ 模块 %s 发布%s %s 超时，请手动检查状态！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		count++

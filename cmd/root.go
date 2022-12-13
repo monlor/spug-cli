@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	version  = "v0.0.1"
+	version  = "v0.0.2"
 	s        api.Spug
 	login    Login
 	userPath = fmt.Sprintf("%s/.spug", os.Getenv("HOME"))
@@ -32,7 +32,8 @@ type Login struct {
 var rootCmd = &cobra.Command{
 	Use:   "spug-cli",
 	Short: "Spug command line tool, support application release, log query, audit and so on",
-	Example: `  spug-cli login -u [your user name] -p [your password]
+	Example: `  spug-cli login
+  spug-cli publish
   spug-cli publish -e dev -a job
   spug-cli publish -e dev -a base -v dev-latest -w
   spug-cli logs 6634
