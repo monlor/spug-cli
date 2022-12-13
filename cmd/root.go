@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	version  = "v0.0.2"
+	version  = "v0.0.3"
 	s        api.Spug
 	login    Login
 	userPath = fmt.Sprintf("%s/.spug", os.Getenv("HOME"))

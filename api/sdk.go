@@ -16,6 +16,10 @@ func Login(s *Spug) error {
 		SetResult(&result).
 		Post(s.Url + SpugLoginApi)
 
+	if result.Error != "" {
+		return errors.New(result.Error)
+	}
+
 	s.Token = result.Data.AccessToken
 
 	return err

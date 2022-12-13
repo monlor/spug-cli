@@ -22,8 +22,7 @@ func init() {
 		Use:   "publish",
 		Short: "Publish your application",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			err := api.Login(&s)
-			if err != nil {
+			if err := api.Login(&s); err != nil {
 				return err
 			}
 			// 输入参数

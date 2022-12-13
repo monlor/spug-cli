@@ -19,7 +19,9 @@ func init() {
 		Use:   "list",
 		Short: "List spug apply",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			api.Login(&s)
+			if err := api.Login(&s); err != nil {
+				return err
+			}
 			applies, err := s.Apply()
 			if err != nil {
 				return err

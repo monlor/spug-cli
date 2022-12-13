@@ -17,7 +17,9 @@ func init() {
 		Use:   "logs [applyId]",
 		Short: "Show apply logs",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			api.Login(&s)
+			if err := api.Login(&s); err != nil {
+				return err
+			}
 			if len(args) == 0 {
 				if err := SelectApply(&applyId); err != nil {
 					return err
