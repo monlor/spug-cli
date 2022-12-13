@@ -95,7 +95,7 @@ func init() {
 	publishCmd.PersistentFlags().StringVarP(&version, "version", "v", "", "Application branch/tag to publish, eg: dev-latest,v1.0.0...")
 	publishCmd.PersistentFlags().StringVarP(&environment, "environment", "e", "", "Publish Environment Key, eg: dev,test,uat,saas... (required)")
 	publishCmd.PersistentFlags().BoolVarP(&wait, "wait", "w", false, "Wait for the release to complete")
-	publishCmd.PersistentFlags().StringVarP(&title, "title", "t", "Spug Cli 工具自动提交", "Publish title")
+	publishCmd.PersistentFlags().StringVarP(&title, "title", "t", "Spug Cli", "Publish title")
 
 	//publishCmd.MarkPersistentFlagRequired("appKey")
 	//publishCmd.MarkPersistentFlagRequired("environment")
