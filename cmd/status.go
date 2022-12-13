@@ -5,7 +5,6 @@ package cmd
 
 import (
 	"fmt"
-	"spug-cli/api"
 	"strconv"
 
 	"github.com/spf13/cobra"
@@ -18,7 +17,7 @@ func init() {
 		Use:   "status [applyId]",
 		Short: "Show apply status",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := api.Login(&s); err != nil {
+			if err := LoginSpug(); err != nil {
 				return err
 			}
 			if len(args) == 0 {

@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 	"github.com/spf13/cobra"
-	"spug-cli/api"
 )
 
 func init() {
@@ -19,7 +18,7 @@ func init() {
 		Use:   "list",
 		Short: "List spug apply",
 		RunE: func(cmd *cobra.Command, args []string) error {
-			if err := api.Login(&s); err != nil {
+			if err := LoginSpug(); err != nil {
 				return err
 			}
 			applies, err := s.Apply()

@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	version  = "v0.0.3"
+	version  = "v0.0.4"
 	s        api.Spug
 	login    Login
 	userPath = fmt.Sprintf("%s/.spug", os.Getenv("HOME"))
@@ -83,6 +83,16 @@ func readUser() {
 		Username: login.Username,
 		Password: login.Password,
 	}
+}
+
+func LoginSpug() error {
+	if s.Url == "" || s.Username == "" || s.Password == "" {
+		return errors.New("找不到用户信息！执行命令登录：spug-cli login")
+	}
+	if err := api.Login(&s); err != nil {
+		return err
+	}
+	return nil
 }
 
 func GetEnvId(environment string) (envId int, err error) {

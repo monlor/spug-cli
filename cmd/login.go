@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 	"os"
+	"spug-cli/api"
 )
 
 func init() {
@@ -45,10 +46,20 @@ func init() {
 				Password:     password,
 				LarkBotToken: larkBotToken,
 			}
-			if err := writeUser(login); err != nil {
-				return err
+			// 验证登录
+			s = api.Spug{
+				Url:      login.Url,
+				Username: login.Username,
+				Password: login.Password,
 			}
-			fmt.Println("登录成功！")
+			if err := LoginSpug(); err != nil {
+				return err
+			} else {
+				if err := writeUser(login); err != nil {
+					return err
+				}
+				fmt.Println("登录成功！")
+			}
 			return nil
 		},
 	}
