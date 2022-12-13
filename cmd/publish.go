@@ -111,17 +111,17 @@ func waitFinish(data api.ApplyData) error {
 		}
 		if info.Status == "3" {
 			fmt.Println("发布成功！")
-			SendMessage(fmt.Sprintf("🎉 模块 %s 发布%s %s 成功！", data.AppName, data.EnvName, data.Version))
+			SendMessage(fmt.Sprintf("🎉 模块【 %s 】发布【%s】 %s 成功！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		if info.Status != "2" {
 			fmt.Printf("发布失败！%s:%s\n", info.StatusAlias, info.Reason)
-			SendMessage(fmt.Sprintf("💥 模块 %s 发布%s %s 失败！", data.AppName, data.EnvName, data.Version))
+			SendMessage(fmt.Sprintf("💥 模块【 %s 】发布【%s】 %s 失败！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		if count >= maxCount {
 			fmt.Println("检查超时！请手动检查状态！")
-			SendMessage(fmt.Sprintf("❗️️ 模块 %s 发布%s %s 超时，请手动检查状态！", data.AppName, data.EnvName, data.Version))
+			SendMessage(fmt.Sprintf("❗️️ 模块【 %s 】发布【%s】 %s 超时，请手动检查状态！", data.AppName, data.EnvName, data.Version))
 			break
 		}
 		count++
