@@ -3,8 +3,8 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/monlor/spug-cli/api"
 	"github.com/spf13/cobra"
-	"spug-cli/api"
 	"time"
 )
 

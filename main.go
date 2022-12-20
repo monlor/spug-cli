@@ -1,10 +1,9 @@
 /*
 Copyright © 2022 NAME HERE <EMAIL ADDRESS>
-
 */
 package main
 
-import "spug-cli/cmd"
+import "github.com/monlor/spug-cli/cmd"
 
 func main() {
 	cmd.Execute()

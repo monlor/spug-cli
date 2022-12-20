@@ -1,4 +1,4 @@
-module spug-cli
+module github.com/monlor/spug-cli
 
 go 1.19
 

@@ -6,9 +6,9 @@ package cmd
 import (
 	"encoding/gob"
 	"fmt"
+	"github.com/monlor/spug-cli/api"
 	"github.com/spf13/cobra"
 	"os"
-	"spug-cli/api"
 )
 
 func init() {

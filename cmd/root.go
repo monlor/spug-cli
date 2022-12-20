@@ -8,8 +8,8 @@ import (
 	"errors"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/monlor/spug-cli/api"
 	"os"
-	"spug-cli/api"
 
 	"github.com/spf13/cobra"
 )
