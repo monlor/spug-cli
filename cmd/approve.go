@@ -23,7 +23,7 @@ func init() {
 			if err != nil {
 				return err
 			}
-			envId, err := GetEnvId(environment)
+			envId, err := s.GetEnvId(environment)
 			if err != nil {
 				return err
 			}

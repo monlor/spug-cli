@@ -42,12 +42,12 @@ func init() {
 			}
 			// 开始发布
 			// 获取环境id
-			envId, err := GetEnvId(environment)
+			envId, err := s.GetEnvId(environment)
 			if err != nil {
 				return err
 			}
 			// 先获取appId
-			appId, err := GetAppId(appKey)
+			appId, err := s.GetAppId(appKey)
 			if err != nil {
 				return err
 			}
