@@ -11,8 +11,12 @@ func Login(s *Spug) error {
 	client := resty.New()
 	var result LoginResp
 
+	if s.Type == "" {
+		s.Type = "ldap"
+	}
+
 	_, err := client.R().
-		SetBody(fmt.Sprintf(`{"username":"%s","password":"%s","type":"ldap"}`, s.Username, s.Password)).
+		SetBody(fmt.Sprintf(`{"username":"%s","password":"%s","type":"%s"}`, s.Username, s.Password, s.Type)).
 		SetResult(&result).
 		Post(s.Url + SpugLoginApi)
 

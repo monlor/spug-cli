@@ -5,6 +5,7 @@ type Spug struct {
 	Url      string
 	Username string
 	Password string
+	Type     string
 }
 
 type CommonVo struct {
